@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #F5F1E8;
+    --background-secondary: #E8E2D5;
+    --foreground: #2B2621;
+    --primary: #2D4A2B;
+    --primary-accent: #5C7A52;
+    --accent-cta: #B5652F;
+    --border: #D4CDBB;
+    --card: #F5F1E8;
+    --card-foreground: #2B2621;
+    --muted: #E8E2D5;
+    --muted-foreground: #6B6357;
+    --ring: #2D4A2B;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: #1B1F19;
+    --background-secondary: #242A22;
+    --foreground: #F2EBDC;
+    --primary: #242A22;
+    --primary-accent: #92B380;
+    --accent-cta: #E0854B;
+    --border: #3A3F35;
+    --card: #242A22;
+    --card-foreground: #F2EBDC;
+    --muted: #2A3026;
+    --muted-foreground: #B5C4AD; /* Zeytin & Kum Tonlu Açıklama Metni */
+    --ring: #92B380;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-feature-settings: "ss01", "cv01";
+  }
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-serif), Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+  .dark h1:not(.text-white),
+  .dark h2:not(.text-white),
+  .dark h3:not(.text-white),
+  .dark h4:not(.text-white),
+  .dark h5:not(.text-white) {
+    color: #92B380;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .bg-background { background-color: var(--background); }
+  .bg-background-secondary { background-color: var(--background-secondary); }
+  .bg-card { background-color: var(--card); }
+  .bg-muted { background-color: var(--muted); }
+  .text-foreground { color: var(--foreground); }
+  .text-muted-foreground { color: var(--muted-foreground); }
+  .text-primary { color: var(--primary); }
+  .text-primary-accent { color: var(--primary-accent); }
+  .text-accent-cta { color: var(--accent-cta); }
+  .bg-primary { background-color: var(--primary); }
+  .bg-primary-accent { background-color: var(--primary-accent); }
+  .bg-accent-cta { background-color: var(--accent-cta); }
+  .border-border { border-color: var(--border); }
+  .border-primary { border-color: var(--primary); }
+  .ring-ring { --tw-ring-color: var(--ring); }
+
+  .font-serif { font-family: var(--font-serif), Georgia, serif; }
+  .font-sans { font-family: var(--font-sans), system-ui, sans-serif; }
+
+  .hero-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(43, 38, 33, 0.15) 0%,
+      rgba(43, 38, 33, 0.35) 50%,
+      rgba(43, 38, 33, 0.65) 100%
+    );
+  }
+
+  .section-fade-top {
+    background: linear-gradient(180deg, var(--background) 0%, transparent 100%);
+  }
+
+  .glass {
+    background: color-mix(in srgb, var(--background) 80%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .text-shadow-soft {
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--primary-accent);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--muted) 25%,
+    var(--background-secondary) 50%,
+    var(--muted) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-accent);
+}
+
+html {
+  scroll-behavior: smooth;
+}
