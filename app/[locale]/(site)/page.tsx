@@ -28,7 +28,7 @@ export default function HomePage({ params }: { params: { locale: string } }) {
           }} 
         />
 
-        <div className="relative z-10 mx-auto w-full max-w-[85rem] px-4 pb-8 pt-44 sm:px-6 lg:px-10 lg:pb-12">
+        <div className="relative z-10 mx-auto w-full max-w-[85rem] px-4 pb-8 pt-28 sm:px-6 sm:pt-44 lg:px-10 lg:pb-12">
           <div className="max-w-2xl text-white">
             <SectionReveal>
               <p className="mb-4 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.14em] text-white/80"><span className="h-px w-8 bg-accent-cta" />{dict.hero.badge}</p>
@@ -80,11 +80,11 @@ export default function HomePage({ params }: { params: { locale: string } }) {
         />
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="ml-auto max-w-2xl text-right text-white">
+          <div className="mx-auto max-w-2xl text-center sm:ml-auto sm:text-right text-white">
             <SectionReveal>
               <h2 className="text-3xl font-semibold sm:text-5xl text-shadow-soft">{dict.ctaSection.title}</h2>
-              <p className="ml-auto mt-5 max-w-xl text-base leading-8 text-white/90 sm:text-lg">{dict.ctaSection.subtitle}</p>
-              <div className="mt-8 flex flex-col items-center justify-end gap-4 sm:flex-row">
+              <p className="mt-5 max-w-xl text-base leading-8 text-white/90 sm:text-lg sm:ml-auto">{dict.ctaSection.subtitle}</p>
+              <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:justify-end">
                 <a href={`tel:${dict.ctaSection.phone.replace(/\s/g, '')}`} className="text-sm font-semibold text-white/90 hover:text-white transition-colors">{dict.ctaSection.phone}</a>
                 <Link href={`/${locale}/contact`} className="inline-flex items-center gap-2 rounded-lg bg-accent-cta px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.02]">{dict.ctaSection.button}<ArrowRight className="h-4 w-4" /></Link>
               </div>

@@ -68,7 +68,7 @@ export function Header({ locale, dict }: Props) {
               <div className={`flex items-center justify-center rounded-lg bg-primary text-white transition-all duration-300 ${scrolled ? 'w-8 h-8' : 'w-10 h-10'}`}>
                 <Leaf className={scrolled ? 'w-4 h-4' : 'w-5 h-5'} />
               </div>
-              <span className={`font-serif font-semibold text-foreground transition-all duration-300 ${scrolled ? 'text-base' : 'text-lg'}`}>
+              <span className={`font-serif font-semibold text-foreground transition-all duration-300 truncate ${scrolled ? 'text-sm sm:text-base' : 'text-sm sm:text-lg'}`}>
                 Yeşil Toprak Peyzaj
               </span>
             </Link>
