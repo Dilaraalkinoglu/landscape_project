@@ -34,9 +34,9 @@ export default function HomePage({ params }: { params: { locale: string } }) {
               <p className="mb-4 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.14em] text-white/80"><span className="h-px w-8 bg-accent-cta" />{dict.hero.badge}</p>
               <h1 className="max-w-2xl text-3xl font-semibold leading-[1.1] text-white sm:text-5xl lg:text-6xl">{dict.hero.title}</h1>
               <p className="mt-5 max-w-xl text-base leading-7 text-white/85 sm:text-lg">{dict.hero.subtitle}</p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link href={`/${locale}/contact`} className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent-cta px-6 py-3.5 sm:px-7 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.02] whitespace-nowrap">{dict.hero.primaryCta}<ArrowRight className="h-4 w-4" /></Link>
-                <Link href={`/${locale}/portfolio`} className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/35 bg-white/10 px-6 py-3.5 sm:px-7 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20 whitespace-nowrap">{dict.hero.secondaryCta}<ArrowUpRight className="h-4 w-4" /></Link>
+              <div className="mt-6 flex flex-row flex-wrap gap-3">
+                <Link href={`/${locale}/contact`} className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent-cta px-5 py-3 sm:px-7 sm:py-3.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.02] whitespace-nowrap">{dict.hero.primaryCta}<ArrowRight className="h-4 w-4" /></Link>
+                <Link href={`/${locale}/portfolio`} className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/35 bg-white/10 px-5 py-3 sm:px-7 sm:py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20 whitespace-nowrap">{dict.hero.secondaryCta}<ArrowUpRight className="h-4 w-4" /></Link>
               </div>
             </SectionReveal>
           </div>
