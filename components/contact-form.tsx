@@ -2,12 +2,16 @@
 
 import { FormEvent, useState } from 'react';
 import type { Dict } from '@/lib/dictionary';
+import { LeafLoader } from '@/components/leaf-loader';
+import { useCursor } from '@/hooks/use-cursor';
 
 export function ContactForm({ dict }: { dict: Dict }) {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { setCursorType } = useCursor();
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(false);
 
@@ -21,6 +25,10 @@ export function ContactForm({ dict }: { dict: Dict }) {
       return; 
     }
 
+    setLoading(true);
+    // Simulate short network request
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    setLoading(false);
     setSent(true);
     form.reset();
   };
@@ -73,8 +81,21 @@ export function ContactForm({ dict }: { dict: Dict }) {
 
       {error && <p className="text-sm text-red-600 font-medium">{dict.contactPage.form.error}</p>}
 
-      <button className="w-full rounded-lg bg-accent-cta px-5 py-3.5 text-sm font-semibold text-white transition-all hover:scale-[1.01] active:scale-[0.99]">
-        {dict.contactPage.form.submit}
+      <button
+        type="submit"
+        disabled={loading}
+        onMouseEnter={() => setCursorType('leaf')}
+        onMouseLeave={() => setCursorType('default')}
+        className="flex items-center justify-center gap-2 w-full rounded-lg bg-accent-cta px-5 py-3.5 text-sm font-semibold text-white transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-75"
+      >
+        {loading ? (
+          <>
+            <LeafLoader size={20} className="text-white" />
+            <span>Gönderiliyor...</span>
+          </>
+        ) : (
+          dict.contactPage.form.submit
+        )}
       </button>
     </form>
   );

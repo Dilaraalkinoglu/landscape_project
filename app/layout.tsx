@@ -34,6 +34,9 @@ export const metadata: Metadata = {
   },
 };
 
+import { CursorProvider } from '@/hooks/use-cursor';
+import { CustomCursor } from '@/components/custom-cursor';
+
 export default function RootLayout({
   children,
 }: {
@@ -42,7 +45,10 @@ export default function RootLayout({
   return (
     <html lang="tr" suppressHydrationWarning>
       <body className={`${inter.variable} ${fraunces.variable} font-sans antialiased`}>
-        {children}
+        <CursorProvider>
+          <CustomCursor />
+          {children}
+        </CursorProvider>
       </body>
     </html>
   );

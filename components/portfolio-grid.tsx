@@ -7,10 +7,12 @@ import { ArrowUpRight, Filter } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Locale } from '@/lib/i18n';
 import type { Dict, Project } from '@/lib/dictionary';
+import { useCursor } from '@/hooks/use-cursor';
 
 type Props = { locale: Locale; dict: Dict; projects: Project[]; };
 
 export function PortfolioGrid({ locale, dict, projects }: Props) {
+  const { setCursorType } = useCursor();
   const [filter, setFilter] = useState<string>('all');
   const filters = ['all', 'residential', 'commercial', 'hardscape', 'irrigation', 'lighting', 'maintenance'];
   const filtered = filter === 'all' ? projects : projects.filter((p) => p.category === filter);
@@ -23,6 +25,8 @@ export function PortfolioGrid({ locale, dict, projects }: Props) {
           <button
             key={f}
             onClick={() => setFilter(f)}
+            onMouseEnter={() => setCursorType('leaf')}
+            onMouseLeave={() => setCursorType('default')}
             className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
               filter === f ? 'bg-primary text-white' : 'border border-border bg-card text-foreground hover:bg-muted'
             }`}
@@ -43,7 +47,12 @@ export function PortfolioGrid({ locale, dict, projects }: Props) {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3 }}
             >
-              <Link href={`/${locale}/portfolio/${project.id}`} className="group block overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+              <Link
+                href={`/${locale}/portfolio/${project.id}`}
+                onMouseEnter={() => setCursorType('inspect')}
+                onMouseLeave={() => setCursorType('default')}
+                className="group block overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+              >
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image src={project.cover} alt={project.title[locale]} fill className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 33vw" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />

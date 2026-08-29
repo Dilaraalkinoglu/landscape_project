@@ -35,14 +35,14 @@ export function HeroSeasonalView({ seasonalImages, alt, className }: HeroSeasona
     <div className={cn('absolute inset-0', className)}>
       {/* Background Animated Image */}
       <div className="relative w-full h-full">
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           <motion.div
             key={selectedSeason}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, ease: 'easeInOut' }}
-            className="absolute inset-0 w-full h-full"
+            transition={{ duration: 0.45, ease: 'easeOut' }}
+            className="absolute inset-0 w-full h-full will-change-opacity"
           >
             <Image
               src={seasonalImages[selectedSeason]}

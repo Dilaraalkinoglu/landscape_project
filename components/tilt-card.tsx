@@ -2,8 +2,10 @@
 
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import Image from 'next/image';
+import { useCursor } from '@/hooks/use-cursor';
 
 export function TiltCard({ src, alt, className = '', children }: { src: string; alt: string; className?: string; children: React.ReactNode }) {
+  const { setCursorType } = useCursor();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [12, -12]), { stiffness: 200, damping: 20 });
@@ -15,12 +17,17 @@ export function TiltCard({ src, alt, className = '', children }: { src: string; 
     <motion.div
       className={`relative overflow-hidden rounded-2xl cursor-pointer ${className}`}
       style={{ rotateX, rotateY, transformPerspective: 1000 }}
+      onMouseEnter={() => setCursorType('drag')}
       onMouseMove={(event) => {
         const bounds = event.currentTarget.getBoundingClientRect();
         x.set((event.clientX - bounds.left) / bounds.width - 0.5);
         y.set((event.clientY - bounds.top) / bounds.height - 0.5);
       }}
-      onMouseLeave={() => { x.set(0); y.set(0); }}
+      onMouseLeave={() => {
+        setCursorType('default');
+        x.set(0);
+        y.set(0);
+      }}
     >
       <motion.div className="relative w-full h-full" style={{ x: imgX, y: imgY, scale: 1.12 }}>
         <Image src={src} alt={alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />

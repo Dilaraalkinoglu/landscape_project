@@ -8,6 +8,7 @@ import { Menu, X, Leaf, Sun, Moon, Globe } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import type { Locale } from '@/lib/i18n';
 import type { Dict } from '@/lib/dictionary';
+import { useCursor } from '@/hooks/use-cursor';
 
 type Props = {
   locale: Locale;
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export function Header({ locale, dict }: Props) {
+  const { setCursorType } = useCursor();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
@@ -64,7 +66,12 @@ export function Header({ locale, dict }: Props) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className={`flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-14' : 'h-20'}`}>
             {/* Logo */}
-            <Link href={`/${locale}`} className="flex items-center gap-2 group">
+            <Link
+              href={`/${locale}`}
+              onMouseEnter={() => setCursorType('leaf')}
+              onMouseLeave={() => setCursorType('default')}
+              className="flex items-center gap-2 group"
+            >
               <div className={`flex items-center justify-center rounded-lg bg-primary text-white transition-all duration-300 ${scrolled ? 'w-8 h-8' : 'w-10 h-10'}`}>
                 <Leaf className={scrolled ? 'w-4 h-4' : 'w-5 h-5'} />
               </div>
@@ -79,6 +86,8 @@ export function Header({ locale, dict }: Props) {
                 <Link
                   key={item.key}
                   href={item.href}
+                  onMouseEnter={() => setCursorType('leaf')}
+                  onMouseLeave={() => setCursorType('default')}
                   className={`relative px-3 py-2 text-sm font-medium transition-all duration-200 ${
                     isActive(item.href)
                       ? 'text-accent-cta font-semibold'
@@ -104,6 +113,8 @@ export function Header({ locale, dict }: Props) {
               <div className="relative">
                 <button
                   onClick={() => setLangOpen(!langOpen)}
+                  onMouseEnter={() => setCursorType('leaf')}
+                  onMouseLeave={() => setCursorType('default')}
                   className="flex items-center gap-1.5 px-2.5 py-2 rounded-md text-sm font-medium text-foreground hover:text-accent-cta hover:bg-accent-cta/10 transition-colors"
                   aria-label={dict.language}
                 >
@@ -142,6 +153,8 @@ export function Header({ locale, dict }: Props) {
               {/* Theme toggle */}
               <button
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                onMouseEnter={() => setCursorType('leaf')}
+                onMouseLeave={() => setCursorType('default')}
                 className="p-2 rounded-md text-foreground hover:text-accent-cta hover:bg-accent-cta/10 transition-colors"
                 aria-label={theme === 'dark' ? dict.theme.light : dict.theme.dark}
               >
@@ -151,6 +164,8 @@ export function Header({ locale, dict }: Props) {
               {/* CTA button */}
               <Link
                 href={`/${locale}/contact`}
+                onMouseEnter={() => setCursorType('leaf')}
+                onMouseLeave={() => setCursorType('default')}
                 className="hidden sm:inline-flex items-center px-4 py-2 rounded-lg bg-accent-cta text-white text-sm font-medium hover:opacity-90 transition-opacity shadow-sm"
               >
                 {dict.nav.cta}
