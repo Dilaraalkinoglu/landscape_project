@@ -1,5 +1,14 @@
 import type { Locale } from './i18n';
 
+export interface SeasonalImage {
+  spring: string;
+  summer: string;
+  autumn: string;
+  winter: string;
+}
+
+export type Season = 'spring' | 'summer' | 'autumn' | 'winter';
+
 export type Project = {
   id: string;
   title: { tr: string; en: string };
@@ -578,6 +587,13 @@ export const team: TeamMember[] = [
 ];
 
 export const heroImage = 'https://images.pexels.com/photos/7174103/pexels-photo-7174103.jpeg?auto=compress&cs=tinysrgb&w=1920';
+
+export const heroSeasonalImages: SeasonalImage = {
+  spring: '/images/seasons/hero-spring.jpg',
+  summer: '/images/seasons/hero-summer.jpg',
+  autumn: '/images/seasons/hero-autumn.jpg',
+  winter: '/images/seasons/hero-winter.jpg',
+};
 
 export const aboutHeroImage = 'https://images.pexels.com/photos/4920333/pexels-photo-4920333.jpeg?auto=compress&cs=tinysrgb&w=1920';
 

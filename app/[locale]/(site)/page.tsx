@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, ArrowUpRight, Check, Quote } from 'lucide-react';
-import { getDict, heroImage, ctaBgImage, projects, services, testimonials } from '@/lib/dictionary';
+import { getDict, heroSeasonalImages, ctaBgImage, projects, services, testimonials } from '@/lib/dictionary';
 import { isLocale, type Locale } from '@/lib/i18n';
 import { SectionReveal } from '@/components/section-reveal';
+import { HeroSeasonalView } from '@/components/hero-seasonal-view';
 import { Icon } from '@/components/icon';
 import { StatCounter } from '@/components/stat-counter';
 
@@ -18,7 +19,10 @@ export default function HomePage({ params }: { params: { locale: string } }) {
   return (
     <div>
       <section className="relative min-h-screen flex items-end overflow-hidden bg-primary">
-        <Image src={heroImage} alt="Modern garden landscape surrounding a home" fill priority className="object-cover" sizes="100vw" />
+        <HeroSeasonalView 
+          seasonalImages={heroSeasonalImages} 
+          alt={dict.hero.title} 
+        />
         
         {/* Soft Dark Transparency Overlay */}
         <div 
