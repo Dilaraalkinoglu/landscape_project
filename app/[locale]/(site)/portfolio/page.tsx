@@ -2,6 +2,7 @@ import { getDict, projects } from '@/lib/dictionary';
 import { isLocale, type Locale } from '@/lib/i18n';
 import { SectionReveal } from '@/components/section-reveal';
 import { PortfolioGrid } from '@/components/portfolio-grid';
+import { GrowingVine } from '@/components/growing-vine';
 import { notFound } from 'next/navigation';
 
 export default function PortfolioPage({ params }: { params: { locale: string } }) {
@@ -21,11 +22,13 @@ export default function PortfolioPage({ params }: { params: { locale: string } }
         </div>
       </section>
 
-      <section className="bg-background pt-6 pb-16 sm:pt-8 sm:pb-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <PortfolioGrid locale={locale} dict={dict} projects={projects} />
-        </div>
-      </section>
+      <div className="relative">
+        <section className="relative z-10 bg-transparent pt-6 pb-16 sm:pt-8 sm:pb-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <PortfolioGrid locale={locale} dict={dict} projects={projects} />
+          </div>
+        </section>
+      </div>
     </div>
   );
 }

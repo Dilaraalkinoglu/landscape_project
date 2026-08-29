@@ -3,6 +3,7 @@ import { getDict } from '@/lib/dictionary';
 import { isLocale, type Locale } from '@/lib/i18n';
 import { SectionReveal } from '@/components/section-reveal';
 import { ContactForm } from '@/components/contact-form';
+import { GrowingVine } from '@/components/growing-vine';
 import { notFound } from 'next/navigation';
 
 export default function ContactPage({ params }: { params: { locale: string } }) {
@@ -22,15 +23,16 @@ export default function ContactPage({ params }: { params: { locale: string } }) 
         </div>
       </section>
 
-      <section className="bg-background pt-6 pb-16 sm:pt-8 sm:pb-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[1.1fr_.9fr]">
-            <SectionReveal>
-              <h2 className="text-3xl font-semibold">{dict.contactPage.form.formTitle}</h2>
-              <div className="mt-6 rounded-2xl border border-border bg-card p-6">
-                <ContactForm dict={dict} />
-              </div>
-            </SectionReveal>
+      <div className="relative">
+        <section className="relative z-10 bg-transparent pt-6 pb-16 sm:pt-8 sm:pb-24">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-12 lg:grid-cols-[1.1fr_.9fr]">
+              <SectionReveal>
+                <h2 className="text-3xl font-semibold">{dict.contactPage.form.formTitle}</h2>
+                <div className="mt-6 rounded-2xl border border-border bg-card/95 backdrop-blur-sm p-6">
+                  <ContactForm dict={dict} />
+                </div>
+              </SectionReveal>
 
             <SectionReveal delay={0.1}>
               <h2 className="text-3xl font-semibold">{dict.contactPage.info.title}</h2>
@@ -83,5 +85,6 @@ export default function ContactPage({ params }: { params: { locale: string } }) 
         </div>
       </section>
     </div>
+  </div>
   );
 }

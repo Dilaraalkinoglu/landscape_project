@@ -20,7 +20,7 @@ export function Footer({ locale, dict }: Props) {
   ] as const;
 
   return (
-    <footer className="border-t border-border bg-background-secondary">
+    <footer className="relative z-10 border-t border-border bg-background-secondary/80 backdrop-blur-xs">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}

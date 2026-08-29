@@ -62,7 +62,7 @@ export function CustomCursor() {
         {cursorType === 'default' && (
           <motion.div
             key="default"
-            className="w-2.5 h-2.5 rounded-full bg-[#2D4A2B] shadow-sm"
+            className="w-3 h-3 rounded-full bg-[#8ECA7E] border border-[#1B1F19]/40 shadow-[0_1px_4px_rgba(0,0,0,0.35)]"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
@@ -98,13 +98,13 @@ export function CustomCursor() {
         {cursorType === 'leaf' && (
           <motion.div
             key="leaf"
-            className="text-[#5C7A52] drop-shadow-sm"
+            className="text-[#8ECA7E] drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
             initial={{ scale: 0, rotate: -15 }}
             animate={{ scale: 1, rotate: 0 }}
             exit={{ scale: 0, rotate: 15 }}
             transition={{ duration: 0.12 }}
           >
-            <Leaf size={24} fill="currentColor" />
+            <Leaf size={24} fill="currentColor" className="stroke-[#1B1F19]/60 stroke-[1.2]" />
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,6 +1,7 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
+import { GrowingVine } from '@/components/growing-vine';
 import { getDict } from '@/lib/dictionary';
 import { isLocale, type Locale } from '@/lib/i18n';
 import { notFound } from 'next/navigation';
@@ -19,8 +20,12 @@ export default async function SiteLayout({
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
       <Header locale={locale} dict={dict} />
-      <main>{children}</main>
-      <Footer locale={locale} dict={dict} />
+      <div className="relative overflow-hidden w-full">
+        {/* Tüm sayfalarda hero altından başlayıp en alttaki footer/hızlı erişime kadar uzanan dal */}
+        <GrowingVine />
+        <main className="relative z-10">{children}</main>
+        <Footer locale={locale} dict={dict} />
+      </div>
     </ThemeProvider>
   );
 }
