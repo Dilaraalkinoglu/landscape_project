@@ -60,6 +60,7 @@ export type Dict = {
     about: string;
     services: string;
     portfolio: string;
+    products: string;
     testimonials: string;
     contact: string;
     cta: string;
@@ -86,6 +87,20 @@ export type Dict = {
     title: string;
     subtitle: string;
     viewAll: string;
+  };
+  productsPreview: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    viewAll: string;
+    selectCategory: string;
+    allProducts: string;
+  };
+  productsPage: {
+    hero: { badge: string; title: string; subtitle: string };
+    allProducts: string;
+    selectCategory: string;
+    itemCount: string;
   };
   testimonials: {
     title: string;
@@ -606,6 +621,7 @@ const dictionaries: Record<Locale, Dict> = {
       about: 'Hakkımızda',
       services: 'Hizmetler',
       portfolio: 'Portföy',
+      products: 'Ürünlerimiz',
       testimonials: 'Referanslar',
       contact: 'İletişim',
       cta: 'Ücretsiz Keşif',
@@ -637,6 +653,24 @@ const dictionaries: Record<Locale, Dict> = {
       title: 'Öne Çıkan Projeler',
       subtitle: 'Tamamladığımız çalışmalardan bir seçki.',
       viewAll: 'Tüm Projeler',
+    },
+    productsPreview: {
+      badge: 'Özel Koleksiyon',
+      title: 'Ürünlerimiz & Peyzaj Koleksiyonu',
+      subtitle: 'Bahçeniz için özenle seçilmiş rulo çimler, heykelsi bitkiler, mimari aydınlatma ve dış mekan mobilyaları.',
+      viewAll: 'Tüm Ürünleri İncele',
+      selectCategory: 'Kategori Seçin',
+      allProducts: 'Tüm Ürünler',
+    },
+    productsPage: {
+      hero: {
+        badge: 'Doğal Yaşam & Peyzaj',
+        title: 'Peyzaj & Bahçe Ürünleri Koleksiyonu',
+        subtitle: 'Açık hava yaşam alanlarınıza değer katan 1. sınıf hazır rulo çimler, tasarım bitkiler, dış mekan aydınlatmaları ve lüks bahçe mobilyaları.',
+      },
+      allProducts: 'Tüm Ürünler',
+      selectCategory: 'Kategoriye Göre Filtrele',
+      itemCount: 'Ürün',
     },
     testimonials: {
       title: 'Müşterilerimiz Ne Diyor?',
@@ -770,6 +804,7 @@ const dictionaries: Record<Locale, Dict> = {
       about: 'About',
       services: 'Services',
       portfolio: 'Portfolio',
+      products: 'Our Products',
       testimonials: 'Testimonials',
       contact: 'Contact',
       cta: 'Free Consultation',
@@ -801,6 +836,24 @@ const dictionaries: Record<Locale, Dict> = {
       title: 'Featured Projects',
       subtitle: 'A selection of our completed work.',
       viewAll: 'All Projects',
+    },
+    productsPreview: {
+      badge: 'Exclusive Collection',
+      title: 'Our Products & Landscape Collection',
+      subtitle: 'Curated premium sod lawns, sculptural plants, architectural lighting, and outdoor living furniture.',
+      viewAll: 'Explore All Products',
+      selectCategory: 'Select Category',
+      allProducts: 'All Products',
+    },
+    productsPage: {
+      hero: {
+        badge: 'Outdoor Living & Landscapes',
+        title: 'Landscape & Garden Collection',
+        subtitle: 'First-class sod grass, designer specimen trees, exterior illumination, and luxury all-weather furniture.',
+      },
+      allProducts: 'All Products',
+      selectCategory: 'Filter by Category',
+      itemCount: 'Items',
     },
     testimonials: {
       title: 'What Our Clients Say',

@@ -11,6 +11,7 @@ import { GrowingVine } from '@/components/growing-vine';
 import { GrowthLineChart } from '@/components/growth-line-chart';
 import { Icon } from '@/components/icon';
 import { StatCounter } from '@/components/stat-counter';
+import { ProductsShowcase } from '@/components/products-showcase';
 
 import { notFound } from 'next/navigation';
 
@@ -104,9 +105,21 @@ export default function HomePage({ params }: { params: { locale: string } }) {
           </div>
         </section>
 
+        {/* 04 — Ürünlerimiz Vitrini */}
+        <section className="relative z-10 bg-background/95 backdrop-blur-xs py-20 sm:py-28 border-t border-border/40">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <ProductsShowcase
+              locale={locale}
+              initialCategory={null}
+              showViewAllLink={true}
+              showHeading={true}
+            />
+          </div>
+        </section>
+
         <section className="relative z-10 bg-primary/95 backdrop-blur-xs py-20 text-white sm:py-24 border-t border-white/10">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <SectionReveal className="max-w-2xl"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/60">04 — {dict.nav.testimonials}</p><h2 className="mt-3 text-4xl font-semibold sm:text-5xl">{dict.testimonials.title}</h2><p className="mt-4 text-lg text-white/70">{dict.testimonials.subtitle}</p></SectionReveal>
+            <SectionReveal className="max-w-2xl"><p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/60">05 — {dict.nav.testimonials}</p><h2 className="mt-3 text-4xl font-semibold sm:text-5xl">{dict.testimonials.title}</h2><p className="mt-4 text-lg text-white/70">{dict.testimonials.subtitle}</p></SectionReveal>
             <div className="mt-12 grid gap-4 md:grid-cols-3">{testimonials.slice(0, 3).map((item, index) => <SectionReveal key={item.id} delay={index * 0.08} className="rounded-2xl border border-white/15 bg-white/5 p-6 backdrop-blur-sm"><Quote className="h-7 w-7 text-accent-cta" /><div className="mt-5 flex gap-1 text-accent-cta">{Array.from({ length: item.rating }).map((_, i) => <span key={i}>★</span>)}</div><p className="mt-4 text-sm leading-7 text-white/80">“{item.text[locale]}”</p><div className="mt-6 border-t border-white/15 pt-4"><p className="font-semibold">{item.name}</p><p className="mt-1 text-xs text-white/55">{item.location[locale]} · {item.project[locale]}</p></div></SectionReveal>)}</div>
           </div>
         </section>
@@ -117,7 +130,7 @@ export default function HomePage({ params }: { params: { locale: string } }) {
 
           <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionReveal className="mb-10 text-center">
-              <p className="eyebrow">05 — {dict.stats.title}</p>
+              <p className="eyebrow">06 — {dict.stats.title}</p>
               <h2 className="mt-3 text-3xl font-semibold sm:text-4xl">{dict.stats.subtitle}</h2>
             </SectionReveal>
             <div className="grid grid-cols-2 gap-y-10 lg:grid-cols-4">

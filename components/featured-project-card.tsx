@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import type { Locale } from '@/lib/i18n';
 import type { Project } from '@/lib/dictionary';
-import { useCursor } from '@/hooks/use-cursor';
 
 interface FeaturedProjectCardProps {
   project: Project;
@@ -15,13 +14,9 @@ interface FeaturedProjectCardProps {
 }
 
 export function FeaturedProjectCard({ project, locale, index, inspectLabel }: FeaturedProjectCardProps) {
-  const { setCursorType } = useCursor();
-
   return (
     <Link
       href={`/${locale}/portfolio/${project.id}`}
-      onMouseEnter={() => setCursorType('inspect')}
-      onMouseLeave={() => setCursorType('default')}
       className={`group block ${index === 0 ? 'md:row-span-2' : ''}`}
     >
       <div

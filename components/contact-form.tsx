@@ -3,13 +3,11 @@
 import { FormEvent, useState } from 'react';
 import type { Dict } from '@/lib/dictionary';
 import { LeafLoader } from '@/components/leaf-loader';
-import { useCursor } from '@/hooks/use-cursor';
 
 export function ContactForm({ dict }: { dict: Dict }) {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { setCursorType } = useCursor();
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -84,8 +82,6 @@ export function ContactForm({ dict }: { dict: Dict }) {
       <button
         type="submit"
         disabled={loading}
-        onMouseEnter={() => setCursorType('leaf')}
-        onMouseLeave={() => setCursorType('default')}
         className="flex items-center justify-center gap-2 w-full rounded-lg bg-accent-cta px-5 py-3.5 text-sm font-semibold text-white transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-75"
       >
         {loading ? (

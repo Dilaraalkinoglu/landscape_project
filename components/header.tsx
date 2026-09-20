@@ -1,14 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Leaf, Sun, Moon, Globe } from 'lucide-react';
+import { Menu, X, Leaf, Sun, Moon, Globe, ChevronDown } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import type { Locale } from '@/lib/i18n';
 import type { Dict } from '@/lib/dictionary';
-import { useCursor } from '@/hooks/use-cursor';
 
 type Props = {
   locale: Locale;
@@ -16,7 +15,6 @@ type Props = {
 };
 
 export function Header({ locale, dict }: Props) {
-  const { setCursorType } = useCursor();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
@@ -36,6 +34,7 @@ export function Header({ locale, dict }: Props) {
     { key: 'home', href: `/${locale}` },
     { key: 'about', href: `/${locale}/about` },
     { key: 'services', href: `/${locale}/services` },
+    { key: 'products', href: `/${locale}/products` },
     { key: 'portfolio', href: `/${locale}/portfolio` },
     { key: 'testimonials', href: `/${locale}/testimonials` },
     { key: 'contact', href: `/${locale}/contact` },
@@ -68,8 +67,6 @@ export function Header({ locale, dict }: Props) {
             {/* Logo */}
             <Link
               href={`/${locale}`}
-              onMouseEnter={() => setCursorType('leaf')}
-              onMouseLeave={() => setCursorType('default')}
               className="flex items-center gap-2 group"
             >
               <div className={`flex items-center justify-center rounded-lg bg-primary text-white transition-all duration-300 ${scrolled ? 'w-8 h-8' : 'w-10 h-10'}`}>
@@ -82,29 +79,31 @@ export function Header({ locale, dict }: Props) {
 
             {/* Desktop nav */}
             <nav className="hidden lg:flex items-center gap-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.key}
-                  href={item.href}
-                  onMouseEnter={() => setCursorType('leaf')}
-                  onMouseLeave={() => setCursorType('default')}
-                  className={`relative px-3 py-2 text-sm font-medium transition-all duration-200 ${
-                    isActive(item.href)
-                      ? 'text-accent-cta font-semibold'
-                      : 'text-foreground/80'
-                  }`}
-                >
-                  <span className="inline-block transition-transform duration-200 hover:scale-115">
-                    {dict.nav[item.key]}
-                  </span>
-                  {isActive(item.href) && (
-                    <motion.div
-                      layoutId="nav-underline"
-                      className="absolute bottom-0 left-3 right-3 h-0.5 bg-accent-cta rounded-full"
-                    />
-                  )}
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                const isItemActive = isActive(item.href);
+                return (
+                  <React.Fragment key={item.key}>
+                    <Link
+                      href={item.href}
+                      className={`relative px-3 py-2 text-sm font-medium transition-all duration-200 ${
+                        isItemActive
+                          ? 'text-accent-cta font-semibold'
+                          : 'text-foreground/80'
+                      }`}
+                    >
+                      <span className="inline-block transition-transform duration-200 hover:scale-115">
+                        {dict.nav[item.key]}
+                      </span>
+                      {isItemActive && (
+                        <motion.div
+                          layoutId="nav-underline"
+                          className="absolute bottom-0 left-3 right-3 h-0.5 bg-accent-cta rounded-full"
+                        />
+                      )}
+                    </Link>
+                  </React.Fragment>
+                );
+              })}
             </nav>
 
             {/* Right controls */}
@@ -113,8 +112,6 @@ export function Header({ locale, dict }: Props) {
               <div className="relative">
                 <button
                   onClick={() => setLangOpen(!langOpen)}
-                  onMouseEnter={() => setCursorType('leaf')}
-                  onMouseLeave={() => setCursorType('default')}
                   className="flex items-center gap-1.5 px-2.5 py-2 rounded-md text-sm font-medium text-foreground hover:text-accent-cta hover:bg-accent-cta/10 transition-colors"
                   aria-label={dict.language}
                 >
@@ -153,8 +150,6 @@ export function Header({ locale, dict }: Props) {
               {/* Theme toggle */}
               <button
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                onMouseEnter={() => setCursorType('leaf')}
-                onMouseLeave={() => setCursorType('default')}
                 className="p-2 rounded-md text-foreground hover:text-accent-cta hover:bg-accent-cta/10 transition-colors"
                 aria-label={theme === 'dark' ? dict.theme.light : dict.theme.dark}
               >
@@ -164,8 +159,6 @@ export function Header({ locale, dict }: Props) {
               {/* CTA button */}
               <Link
                 href={`/${locale}/contact`}
-                onMouseEnter={() => setCursorType('leaf')}
-                onMouseLeave={() => setCursorType('default')}
                 className="hidden sm:inline-flex items-center px-4 py-2 rounded-lg bg-accent-cta text-white text-sm font-medium hover:opacity-90 transition-opacity shadow-sm"
               >
                 {dict.nav.cta}
@@ -205,18 +198,19 @@ export function Header({ locale, dict }: Props) {
               <div className="p-6 pt-20">
                 <nav className="flex flex-col gap-1">
                   {navItems.map((item) => (
-                    <Link
-                      key={item.key}
-                      href={item.href}
-                      onClick={() => setMobileOpen(false)}
-                      className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                        isActive(item.href)
-                          ? 'text-accent-cta bg-muted font-bold'
-                          : 'text-foreground hover:scale-105 inline-block origin-left'
-                      }`}
-                    >
-                      {dict.nav[item.key]}
-                    </Link>
+                    <React.Fragment key={item.key}>
+                      <Link
+                        href={item.href}
+                        onClick={() => setMobileOpen(false)}
+                        className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          isActive(item.href)
+                            ? 'text-accent-cta bg-muted font-bold'
+                            : 'text-foreground hover:scale-105 inline-block origin-left'
+                        }`}
+                      >
+                        {dict.nav[item.key]}
+                      </Link>
+                    </React.Fragment>
                   ))}
                 </nav>
                 <Link

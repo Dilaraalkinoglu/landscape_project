@@ -61,21 +61,10 @@
   }
 }
 
-@media (pointer: fine) {
-  body {
-    cursor: none;
-  }
-  input, textarea, select {
-    cursor: auto;
-  }
-  a, button {
-    cursor: none;
-  }
-}
-
 * {
   -webkit-font-smoothing: antialiased;
 }
+
 
 @layer utilities {
   .text-balance {

@@ -6,7 +6,6 @@ import { ArrowUpRight } from 'lucide-react';
 import type { Locale } from '@/lib/i18n';
 import type { Service } from '@/lib/dictionary';
 import { Icon } from '@/components/icon';
-import { useCursor } from '@/hooks/use-cursor';
 
 interface ServiceCardProps {
   service: Service;
@@ -14,13 +13,9 @@ interface ServiceCardProps {
 }
 
 export function ServiceCard({ service, locale }: ServiceCardProps) {
-  const { setCursorType } = useCursor();
-
   return (
     <Link
       href={`/${locale}/services/${service.id}`}
-      onMouseEnter={() => setCursorType('inspect')}
-      onMouseLeave={() => setCursorType('default')}
       className="group block overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
     >
       <div className="relative aspect-[16/10] overflow-hidden">
