@@ -1,97 +1,105 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Flower2, Sun, Leaf, Snowflake, LucideIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Flower2, Leaf, Snowflake, Sun } from 'lucide-react';
+import type { Locale } from '@/lib/i18n';
 import type { Season, SeasonalImage } from '@/lib/dictionary';
 
-interface HeroSeasonalViewProps {
+const seasons = [
+  { id: 'spring', icon: Flower2, label: { tr: 'İlkbahar', en: 'Spring' } },
+  { id: 'summer', icon: Sun, label: { tr: 'Yaz', en: 'Summer' } },
+  { id: 'autumn', icon: Leaf, label: { tr: 'Sonbahar', en: 'Autumn' } },
+  { id: 'winter', icon: Snowflake, label: { tr: 'Kış', en: 'Winter' } },
+] as const;
+
+type GalleryState = { active: Season; previous?: Season };
+const photoSizes = '(min-width: 1552px) 1100px, (min-width: 1024px) 75vw, 100vw';
+
+export function HeroSeasonalView({ locale, seasonalImages, children }: {
+  locale: Locale;
   seasonalImages: SeasonalImage;
-  alt: string;
-  className?: string;
-}
+  children: ReactNode;
+}) {
+  const [{ active, previous }, setGallery] = useState<GalleryState>({ active: 'summer' });
+  const [pending, setPending] = useState<Season>();
+  const [failed, setFailed] = useState(false);
+  const request = useRef(0);
+  const english = locale === 'en';
+  const groupLabel = english ? 'Seasons' : 'Mevsimler';
+  const activeLabel = seasons.find(({ id }) => id === active)?.label[locale];
+  const alt = english ? 'Villa garden with a stone path and terrace' : 'Taş patikalı ve teraslı villa bahçesi';
 
-const seasons: { key: Season; label: string; icon: LucideIcon }[] = [
-  { key: 'spring', label: 'İlkbahar', icon: Flower2 },
-  { key: 'summer', label: 'Yaz', icon: Sun },
-  { key: 'autumn', label: 'Sonbahar', icon: Leaf },
-  { key: 'winter', label: 'Kış', icon: Snowflake },
-];
+  useEffect(() => () => { request.current += 1; }, []);
 
-export function HeroSeasonalView({ seasonalImages, alt, className }: HeroSeasonalViewProps) {
-  const [selectedSeason, setSelectedSeason] = useState<Season>('summer');
+  async function selectSeason(season: Season) {
+    const id = ++request.current;
+    setFailed(false);
+    setPending(season === active ? undefined : season);
+    if (season === active) return;
 
-  // Preload an image on button hover for instant response
-  const handlePreload = (src: string) => {
-    if (typeof window !== 'undefined' && src) {
-      const img = new window.Image();
-      img.src = src;
+    try {
+      const image = new window.Image();
+      image.src = seasonalImages[season];
+      await image.decode();
+      if (id !== request.current) return;
+      setGallery({ active: season, previous: active });
+    } catch {
+      if (id === request.current) setFailed(true);
+    } finally {
+      if (id === request.current) setPending(undefined);
     }
-  };
+  }
 
   return (
-    <div className={cn('absolute inset-0', className)}>
-      {/* Background Animated Image */}
-      <div className="relative w-full h-full">
-        <AnimatePresence>
-          <motion.div
-            key={selectedSeason}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.45, ease: 'easeOut' }}
-            className="absolute inset-0 w-full h-full will-change-opacity"
-          >
-            <Image
-              src={seasonalImages[selectedSeason]}
-              alt={`${alt} - ${seasons.find((s) => s.key === selectedSeason)?.label || ''}`}
-              fill
-              priority={selectedSeason === 'summer'}
-              className="object-cover"
-              sizes="100vw"
-            />
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Season Toggle Panel (Vertical Pill on Top Right) */}
-      <div className="absolute top-24 right-3 sm:right-6 md:right-10 z-20">
-        <div 
-          className="flex flex-col gap-2 rounded-full px-2 py-3 border border-white/10 shadow-2xl"
-          style={{
-            backgroundColor: 'rgba(27, 31, 25, 0.45)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-          }}
-          role="group"
-          aria-label="Mevsimsel Değişim Önizlemesi"
-        >
-          {seasons.map((season) => {
-            const isSelected = selectedSeason === season.key;
-            return (
-              <button
-                key={season.key}
-                type="button"
-                onClick={() => setSelectedSeason(season.key)}
-                onMouseEnter={() => handlePreload(seasonalImages[season.key])}
-                onFocus={() => handlePreload(seasonalImages[season.key])}
-                aria-label={`${season.label} mevsimini göster`}
-                aria-pressed={isSelected}
-                title={season.label}
-                className={cn(
-                  'flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 min-w-[40px] min-h-[40px] rounded-full transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#B5652F]',
-                  isSelected
-                    ? 'bg-[#B5652F] text-white scale-105 shadow-md font-bold'
-                    : 'text-white/80 hover:text-white hover:bg-white/10'
-                )}
-              >
-                <season.icon className="w-[18px] h-[18px] shrink-0" />
-              </button>
-            );
-          })}
+    <div className="home-hero-layout">
+      <figure className="hero-season-photo">
+        {previous && <Image src={seasonalImages[previous]} alt="" className="season-landscape" fill sizes={photoSizes} />}
+        <Image
+          key={active}
+          src={seasonalImages[active]}
+          alt={`${alt} · ${activeLabel}`}
+          className={`season-landscape ${previous ? 'season-enter' : ''}`}
+          priority={active === 'summer' && !previous}
+          sizes={photoSizes}
+          fill
+          onAnimationEnd={() => setGallery((view) => view.active === active ? { active } : view)}
+        />
+        <div className="season-controls" role="group" aria-label={groupLabel}>
+          {seasons.map(({ id, icon: Icon, label }) => (
+            <button
+              key={id}
+              type="button"
+              className="season-button"
+              aria-label={label[locale]}
+              title={label[locale]}
+              aria-pressed={active === id}
+              data-season={id}
+              data-pending={pending === id || undefined}
+              onClick={() => void selectSeason(id)}
+            >
+              <span className="season-glyph"><Icon size={17} aria-hidden="true" /></span>
+            </button>
+          ))}
         </div>
+        <p className={failed ? 'season-notice' : 'sr-only'} role="status">
+          {failed
+            ? (english ? 'The photo could not load.' : 'Fotoğraf yüklenemedi.')
+            : pending
+              ? (english ? 'Loading photo…' : 'Fotoğraf yükleniyor…')
+              : activeLabel}
+        </p>
+      </figure>
+      <div className="home-hero-copy">
+        <Image
+          src="/images/mediterranean/hero-sprig.png"
+          alt=""
+          aria-hidden="true"
+          width={320}
+          height={200}
+          className="home-hero-sprig"
+        />
+        {children}
       </div>
     </div>
   );

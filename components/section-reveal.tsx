@@ -1,10 +1,17 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
 export function SectionReveal({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+  const reduceMotion = useReducedMotion();
   return (
-    <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.65, delay, ease: 'easeOut' }} className={className}>
+    <motion.div
+      initial={false}
+      whileInView={reduceMotion ? undefined : { opacity: [0.88, 1] }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.22, delay: Math.min(delay, 0.12) }}
+      className={className}
+    >
       {children}
     </motion.div>
   );

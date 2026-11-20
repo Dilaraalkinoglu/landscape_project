@@ -51,7 +51,6 @@ export type Stat = {
 export type TeamMember = {
   name: string;
   role: { tr: string; en: string };
-  image: string;
 };
 
 export type Dict = {
@@ -167,11 +166,11 @@ export const projects: Project[] = [
     category: 'residential',
     location: { tr: 'Ankara, Çayyolu', en: 'Ankara, Çayyolu' },
     year: '2024',
-    cover: 'https://images.pexels.com/photos/8082322/pexels-photo-8082322.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    cover: '/images/mediterranean/modern-villa.webp',
     gallery: [
-      'https://images.pexels.com/photos/8082322/pexels-photo-8082322.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/37989319/pexels-photo-37989319.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/7045706/pexels-photo-7045706.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      '/images/mediterranean/modern-villa.webp',
+      '/images/mediterranean/garden-pool.webp',
+      '/images/mediterranean/terrace-garden.webp',
     ],
     description: {
       tr: 'Modern mimariyle uyumlu, düşük bakım gerektiren çok katmanlı bir konut bahçesi. Yerli bitki türleri ve doğal taş dokuları bir araya getirildi.',
@@ -188,12 +187,10 @@ export const projects: Project[] = [
     category: 'hardscape',
     location: { tr: 'Ankara, Bilkent', en: 'Ankara, Bilkent' },
     year: '2024',
-    cover: 'https://images.pexels.com/photos/37785078/pexels-photo-37785078.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    cover: '/images/mediterranean/terrace-garden.webp',
     gallery: [
-      'https://images.pexels.com/photos/37785078/pexels-photo-37785078.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/11866592/pexels-photo-11866592.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/30290374/pexels-photo-30290374.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/38137355/pexels-photo-38137355.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      '/images/mediterranean/terrace-garden.webp',
+      '/images/mediterranean/stone-villa.webp',
     ],
     description: {
       tr: 'Doğal taş kaplama, oturma alanları ve bitki adalarıyla sıcak bir dış mekan oturma düzeni.',
@@ -210,11 +207,10 @@ export const projects: Project[] = [
     category: 'commercial',
     location: { tr: 'Ankara, Çankaya', en: 'Ankara, Çankaya' },
     year: '2023',
-    cover: 'https://images.pexels.com/photos/14722177/pexels-photo-14722177.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    cover: '/images/mediterranean/garden-path.webp',
     gallery: [
-      'https://images.pexels.com/photos/14722177/pexels-photo-14722177.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/859220/pexels-photo-859220.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/32217856/pexels-photo-32217856.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      '/images/mediterranean/garden-path.webp',
+      '/images/mediterranean/terrace-garden.webp',
     ],
     description: {
       tr: 'Kurumsal kimliği yansıtan, bakımı kolay ve etkileyici bir ticari giriş peyzajı.',
@@ -231,11 +227,10 @@ export const projects: Project[] = [
     category: 'residential',
     location: { tr: 'Ankara, Ümitköy', en: 'Ankara, Ümitköy' },
     year: '2023',
-    cover: 'https://images.pexels.com/photos/8134748/pexels-photo-8134748.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    cover: '/images/mediterranean/garden-pool.webp',
     gallery: [
-      'https://images.pexels.com/photos/8134748/pexels-photo-8134748.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/7045706/pexels-photo-7045706.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/8082322/pexels-photo-8082322.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      '/images/mediterranean/garden-pool.webp',
+      '/images/mediterranean/modern-villa.webp',
     ],
     description: {
       tr: 'Havuz çevresinde tropik ve yerli türlerin bir arada kullanıldığı, akşam kullanımı için aydınlatmalı bir dinlenme bahçesi.',
@@ -252,10 +247,10 @@ export const projects: Project[] = [
     category: 'irrigation',
     location: { tr: 'Ankara, Gazi', en: 'Ankara, Gazi' },
     year: '2024',
-    cover: 'https://images.pexels.com/photos/37720375/pexels-photo-37720375.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    cover: '/images/mediterranean/garden-path.webp',
     gallery: [
-      'https://images.pexels.com/photos/37720375/pexels-photo-37720375.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/25283561/pexels-photo-25283561.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      '/images/mediterranean/garden-path.webp',
+      '/images/mediterranean/stone-garden.webp',
     ],
     description: {
       tr: 'Akıllı kontrol üniteli, su tasarruflu otomatik sulama sistemi. Yağmur sensörü ve bölgesel programlama ile %40 su tasarrufu.',
@@ -272,11 +267,11 @@ export const projects: Project[] = [
     category: 'lighting',
     location: { tr: 'Ankara, Bahçelievler', en: 'Ankara, Bahçelievler' },
     year: '2024',
-    cover: 'https://images.pexels.com/photos/29354637/pexels-photo-29354637.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    cover: '/images/mediterranean/modern-villa.webp',
     gallery: [
-      'https://images.pexels.com/photos/29354637/pexels-photo-29354637.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/698317/pexels-photo-698317.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/19740269/pexels-photo-19740269.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      '/images/mediterranean/modern-villa.webp',
+      '/images/mediterranean/garden-path.webp',
+      '/images/mediterranean/garden-pool.webp',
     ],
     description: {
       tr: 'Yürüyüş yolu, ağaç altı ve oturma alanlarını vurgulayan, sıcak tonlu LED aydınlatma tasarımı.',
@@ -293,10 +288,11 @@ export const projects: Project[] = [
     category: 'maintenance',
     location: { tr: 'Ankara, Çankaya', en: 'Ankara, Çankaya' },
     year: '2024',
-    cover: 'https://images.pexels.com/photos/6728925/pexels-photo-6728925.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    cover: '/images/mediterranean/stone-garden.webp',
     gallery: [
-      'https://images.pexels.com/photos/6728925/pexels-photo-6728925.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/4162016/pexels-photo-4162016.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      '/images/mediterranean/stone-garden.webp',
+      '/images/mediterranean/stone-villa.webp',
+      '/images/mediterranean/garden-path.webp',
     ],
     description: {
       tr: 'Yıllık bakım sözleşmesi kapsamında çim biçme, budama, gübreleme ve mevsimsel yenileme çalışmaları.',
@@ -313,11 +309,11 @@ export const projects: Project[] = [
     category: 'residential',
     location: { tr: 'Ankara, İncek', en: 'Ankara, İncek' },
     year: '2023',
-    cover: 'https://images.pexels.com/photos/7969008/pexels-photo-7969008.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    cover: '/images/mediterranean/terrace-garden.webp',
     gallery: [
-      'https://images.pexels.com/photos/7969008/pexels-photo-7969008.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/25388997/pexels-photo-25388997.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      'https://images.pexels.com/photos/32808802/pexels-photo-32808802.jpeg?auto=compress&cs=tinysrgb&w=1600',
+      '/images/mediterranean/terrace-garden.webp',
+      '/images/mediterranean/modern-villa.webp',
+      '/images/mediterranean/garden-path.webp',
     ],
     description: {
       tr: 'Ahşap zemin, tropik bitkiler ve rahat oturma alanlarıyla bir teras vahası.',
@@ -361,7 +357,7 @@ export const services: Service[] = [
       tr: ['Saha analizi', 'Konsept plan', 'Uygulama projesi', '3D render', 'Bitki planı', 'Sulama planı', 'Aydınlatma planı'],
       en: ['Site analysis', 'Concept plan', 'Implementation project', '3D render', 'Planting plan', 'Irrigation plan', 'Lighting plan'],
     },
-    image: 'https://images.pexels.com/photos/4134179/pexels-photo-4134179.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    image: '/images/mediterranean/garden-pool.webp',
   },
   {
     id: 'implementation',
@@ -393,7 +389,7 @@ export const services: Service[] = [
       tr: ['Toprak hazırlığı', 'Bitkilendirme', 'Çim serimi', 'Mulch uygulaması', 'İlk ay bakımı'],
       en: ['Soil preparation', 'Planting', 'Sod installation', 'Mulching', 'First-month care'],
     },
-    image: 'https://images.pexels.com/photos/4920333/pexels-photo-4920333.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    image: '/images/mediterranean/modern-villa.webp',
   },
   {
     id: 'hardscape',
@@ -425,7 +421,7 @@ export const services: Service[] = [
       tr: ['Doğal taş kaplama', 'Retaining duvar', 'Pergola', 'Dış mekan mutfak', 'Yürüyüş yolu'],
       en: ['Natural stone paving', 'Retaining wall', 'Pergola', 'Outdoor kitchen', 'Walkway'],
     },
-    image: 'https://images.pexels.com/photos/11866592/pexels-photo-11866592.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    image: '/images/mediterranean/stone-villa.webp',
   },
   {
     id: 'irrigation',
@@ -457,7 +453,7 @@ export const services: Service[] = [
       tr: ['Otomatik kontrol', 'Yağmur sensörü', 'Damlama sulama', 'Yağmurlama', 'Bakım'],
       en: ['Automatic controller', 'Rain sensor', 'Drip irrigation', 'Sprinkler', 'Maintenance'],
     },
-    image: 'https://images.pexels.com/photos/3351909/pexels-photo-3351909.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    image: '/images/mediterranean/garden-path.webp',
   },
   {
     id: 'maintenance',
@@ -489,7 +485,7 @@ export const services: Service[] = [
       tr: ['Çim biçma', 'Budama', 'Gübreleme', 'Zararlı kontrolü', 'Mevsimsel yenileme'],
       en: ['Mowing', 'Pruning', 'Fertilizing', 'Pest control', 'Seasonal renewal'],
     },
-    image: 'https://images.pexels.com/photos/4162016/pexels-photo-4162016.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    image: '/images/mediterranean/stone-garden.webp',
   },
   {
     id: 'lighting',
@@ -521,7 +517,7 @@ export const services: Service[] = [
       tr: ['LED aydınlatma', 'Yol ışıkları', 'Ağaç altı', 'Hareket sensörü', 'Otomatik kontrol'],
       en: ['LED lighting', 'Path lights', 'Under-tree', 'Motion sensor', 'Automatic control'],
     },
-    image: 'https://images.pexels.com/photos/698317/pexels-photo-698317.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    image: '/images/mediterranean/modern-villa.webp',
   },
 ];
 
@@ -587,32 +583,27 @@ export const team: TeamMember[] = [
   {
     name: 'Deniz Yılmaz',
     role: { tr: 'Kurucu & Peyzaj Mimarı', en: 'Founder & Landscape Architect' },
-    image: 'https://images.pexels.com/photos/4920272/pexels-photo-4920272.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
   {
     name: 'Selin Kaya',
     role: { tr: 'Tasarım Lideri', en: 'Design Lead' },
-    image: 'https://images.pexels.com/photos/4920284/pexels-photo-4920284.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
   {
     name: 'Burak Demir',
     role: { tr: 'Uygulama Şefi', en: 'Implementation Lead' },
-    image: 'https://images.pexels.com/photos/5622462/pexels-photo-5622462.jpeg?auto=compress&cs=tinysrgb&w=800',
   },
 ];
 
-export const heroImage = 'https://images.pexels.com/photos/7174103/pexels-photo-7174103.jpeg?auto=compress&cs=tinysrgb&w=1920';
-
 export const heroSeasonalImages: SeasonalImage = {
-  spring: '/images/seasons/hero-spring.jpg',
-  summer: '/images/seasons/hero-summer.jpg',
-  autumn: '/images/seasons/hero-autumn.jpg',
-  winter: '/images/seasons/hero-winter.jpg',
+  spring: '/images/seasons/hero-spring.webp',
+  summer: '/images/mediterranean/garden-pool.webp',
+  autumn: '/images/seasons/hero-autumn.webp',
+  winter: '/images/seasons/hero-winter.webp',
 };
 
-export const aboutHeroImage = 'https://images.pexels.com/photos/4920333/pexels-photo-4920333.jpeg?auto=compress&cs=tinysrgb&w=1920';
+export const aboutHeroImage = '/images/mediterranean/stone-garden.webp';
 
-export const ctaBgImage = 'https://images.pexels.com/photos/3280078/pexels-photo-3280078.jpeg?auto=compress&cs=tinysrgb&w=1920';
+export const contactGardenImage = '/images/mediterranean/contact-garden.webp';
 
 const dictionaries: Record<Locale, Dict> = {
   tr: {

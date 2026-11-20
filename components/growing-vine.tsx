@@ -1,233 +1,122 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useSelectedLayoutSegment } from 'next/navigation';
+import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
+const segmentHeight = 340;
+const shoots = [
+  { x: 56, y: 80, facing: -1, at: 22 },
+  { x: 111, y: 152, facing: 1, at: 42 },
+  { x: 77, y: 218, facing: -1, at: 61 },
+  { x: 86, y: 286, facing: 1, at: 80 },
+];
+const homeTracks = ['left', 'center', 'right'] as const;
+const detailTracks = ['right'] as const;
+
+export function HomeVines() {
+  const segment = useSelectedLayoutSegment();
+  return segment === null ? <GrowingVine animated /> : null;
 }
 
-export function GrowingVine() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const stemPathRef = useRef<SVGPathElement>(null);
-  const [metrics, setMetrics] = useState<{
-    height: number;
-    pathD: string;
-    leaves: Array<{
-      id: number;
-      side: 'left' | 'right';
-      x: number;
-      y: number;
-      progressPercent: number;
-    }>;
-  }>({
-    height: 3000,
-    pathD: 'M 500,0',
-    leaves: [],
-  });
+export function GrowingVine({ animated = false }: { animated?: boolean }) {
+  const container = useRef<HTMLDivElement>(null);
+  const drawingId = useId();
+  const [segmentCount, setSegmentCount] = useState(1);
+  const tracks = animated ? homeTracks : detailTracks;
 
-  // Sayfanın gerçek piksel yüksekliğini ölçüp SVG'nin getPointAtLength API'si ile tam gövde teğet noktalarını bulur
   useEffect(() => {
-    const updateMetrics = () => {
-      if (!containerRef.current) return;
-      const h = Math.max(containerRef.current.offsetHeight, 1000);
+    const root = container.current;
+    if (!root) return;
 
-      // Dalın her bir S-dalgası periyodu tam 800px
-      const wavePeriod = 800;
-      const wavesCount = Math.max(Math.ceil(h / wavePeriod), 1);
-      const totalSvgHeight = wavesCount * wavePeriod;
+    const segments = root.querySelectorAll<HTMLElement>('.vine-segment');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let frame = 0;
+    let lastSegment = -1;
 
-      let d = 'M 500,0';
-      for (let i = 0; i < wavesCount; i++) {
-        const yStart = i * wavePeriod;
-        d += ` C 300,${yStart + 260} 700,${yStart + 540} 500,${yStart + 800}`;
+    const draw = () => {
+      frame = 0;
+      const { top, bottom } = root.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const distanceToEnd = Math.max(0, bottom - viewportHeight);
+      // Let the last stretch reach the footer edge at the bottom of the page.
+      const growthLine = viewportHeight - Math.min(viewportHeight * 0.18, distanceToEnd);
+      const progress = Math.max(0, (growthLine - top) / segmentHeight);
+      const currentSegment = Math.min(segments.length - 1, Math.floor(progress));
+      const first = lastSegment < 0 ? 0 : Math.min(lastSegment, currentSegment);
+      const last = lastSegment < 0 ? segments.length - 1 : Math.max(lastSegment, currentSegment);
+
+      for (let index = first; index <= last; index += 1) {
+        const reveal = Math.round(Math.min(1, Math.max(0, progress - index)) * 100);
+        segments[index].style.setProperty('--vine-reveal', String(reveal));
       }
-
-      // Geçici bir SVG path oluşturup eğrinin kesin (x, y) koordinatlarını hesapla
-      const tempPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      tempPath.setAttribute('d', d);
-      const totalLength = tempPath.getTotalLength();
-
-      const leafDistance = 360;
-      const leafCount = Math.max(Math.floor((h - 80) / leafDistance), 2);
-      const leavesList = [];
-
-      for (let i = 1; i <= leafCount; i++) {
-        const targetY = 160 + (i - 1) * leafDistance;
-        if (targetY > h - 40) break;
-
-        // targetY yüksekliğindeki kesin dal eğrisi (x, y) noktasını ikili arama ile bul
-        let low = 0;
-        let high = totalLength;
-        let bestPoint = tempPath.getPointAtLength(0);
-
-        for (let step = 0; step < 24; step++) {
-          const mid = (low + high) / 2;
-          const pt = tempPath.getPointAtLength(mid);
-          if (Math.abs(pt.y - targetY) < 1) {
-            bestPoint = pt;
-            break;
-          }
-          if (pt.y < targetY) {
-            low = mid;
-          } else {
-            high = mid;
-          }
-          bestPoint = pt;
-        }
-
-        const isLeft = i % 2 !== 0;
-        // Dal kalınlığı 6px olduğu için teğet çıkış noktası
-        const exactX = isLeft ? bestPoint.x - 2 : bestPoint.x + 2;
-
-        leavesList.push({
-          id: i,
-          side: isLeft ? ('left' as const) : ('right' as const),
-          x: exactX,
-          y: bestPoint.y,
-          progressPercent: bestPoint.y / h,
-        });
-      }
-
-      setMetrics({
-        height: totalSvgHeight,
-        pathD: d,
-        leaves: leavesList,
-      });
+      lastSegment = currentSegment;
     };
 
-    updateMetrics();
+    const schedule = () => {
+      if (animated && !frame && !reduceMotion.matches) frame = window.requestAnimationFrame(draw);
+    };
 
-    const ro = new ResizeObserver(() => {
-      updateMetrics();
-    });
+    const sizeToFlow = () => {
+      setSegmentCount(Math.max(1, Math.ceil(root.getBoundingClientRect().height / segmentHeight)));
+      schedule();
+    };
 
-    if (containerRef.current) {
-      ro.observe(containerRef.current);
+    const applyMotionPreference = () => {
+      if (reduceMotion.matches) {
+        window.cancelAnimationFrame(frame);
+        frame = 0;
+        lastSegment = -1;
+        segments.forEach((segment) => segment.style.removeProperty('--vine-reveal'));
+      } else {
+        schedule();
+      }
+    };
+
+    sizeToFlow();
+    const observer = new ResizeObserver(sizeToFlow);
+    observer.observe(root);
+    if (animated) {
+      reduceMotion.addEventListener('change', applyMotionPreference);
+      window.addEventListener('scroll', schedule, { passive: true });
+      window.addEventListener('resize', schedule);
     }
-
-    return () => ro.disconnect();
-  }, []);
-
-  useGSAP(
-    () => {
-      if (!stemPathRef.current || !containerRef.current || metrics.leaves.length === 0) return;
-
-      const stem = stemPathRef.current;
-      const pathLength = stem.getTotalLength();
-
-      // Başlangıçta ana dalı gizle
-      gsap.set(stem, {
-        strokeDasharray: pathLength,
-        strokeDashoffset: pathLength,
-      });
-
-      // Ana dalın scroll ile %100 senkron uzaması
-      gsap.to(stem, {
-        strokeDashoffset: 0,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top 85%',
-          end: 'bottom bottom',
-          scrub: 0.3,
-        },
-      });
-
-      // Her yaprağın dal ucu o noktaya ulaştığı an tam kullanıcının gözü önünde filizlenmesi
-      metrics.leaves.forEach((leaf) => {
-        const leafGroup = containerRef.current?.querySelector(`.dynamic-leaf-${leaf.id}`);
-        if (!leafGroup) return;
-
-        gsap.set(leafGroup, {
-          scale: 0,
-          opacity: 0,
-          transformOrigin: '0px 0px',
-        });
-
-        // Dalın ucu o noktaya geldiği anda (ekranın altından girer girmez) yaprak anında büyüyüp açılır
-        gsap.to(leafGroup, {
-          scale: 1,
-          opacity: 1,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: `top+=${leaf.progressPercent * 100}% 95%`,
-            end: `top+=${leaf.progressPercent * 100}% 80%`,
-            scrub: 0.2,
-          },
-        });
-      });
-    },
-    { scope: containerRef, dependencies: [metrics] }
-  );
+    return () => {
+      observer.disconnect();
+      window.cancelAnimationFrame(frame);
+      reduceMotion.removeEventListener('change', applyMotionPreference);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
+  }, [animated, segmentCount]);
 
   return (
-    <div
-      ref={containerRef}
-      className="pointer-events-none absolute inset-0 w-full h-full overflow-hidden select-none z-0 opacity-90 dark:opacity-30 transition-opacity duration-300"
-      aria-hidden="true"
-    >
-      <svg
-        viewBox={`0 0 1000 ${metrics.height}`}
-        preserveAspectRatio="none"
-        className="w-full h-full"
-        fill="none"
-      >
+    <div ref={container} className="vine-layer" aria-hidden="true">
+      <svg className="absolute" width="0" height="0" fill="none">
         <defs>
-          <linearGradient id="dynamicVineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#5C7A52" />
-            <stop offset="30%" stopColor="#8ECA7E" />
-            <stop offset="70%" stopColor="#5C7A52" />
-            <stop offset="100%" stopColor="#8ECA7E" />
-          </linearGradient>
-        </defs>
-
-        {/* Ana Gövde Asma Dalı */}
-        <path
-          ref={stemPathRef}
-          d={metrics.pathD}
-          stroke="url(#dynamicVineGrad)"
-          strokeWidth="6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-
-        {/* Kesin Matematiksel Teğet Noktalarından Filizlenen Yapraklar */}
-        {metrics.leaves.map((leaf) => (
-          <g
-            key={leaf.id}
-            className={`dynamic-leaf-${leaf.id}`}
-            transform={`translate(${leaf.x}, ${leaf.y})`}
-          >
-            {leaf.side === 'left' ? (
-              <>
-                <path d="M 0,0 C -15,5 -35,5 -50,-10" stroke="#5C7A52" strokeWidth="4" strokeLinecap="round" fill="none" />
-                <path
-                  d="M -50,-10 C -70,-50 -130,-40 -150,-10 C -160,20 -105,40 -65,20 C -52,12 -50,-10 -50,-10 Z"
-                  fill="#5C7A52"
-                  stroke="#8ECA7E"
-                  strokeWidth="2.5"
-                />
-                <path d="M -50,-10 Q -95,-10 -140,-10" stroke="#8ECA7E" strokeWidth="2" strokeLinecap="round" fill="none" />
-              </>
-            ) : (
-              <>
-                <path d="M 0,0 C 15,5 35,5 50,-10" stroke="#5C7A52" strokeWidth="4" strokeLinecap="round" fill="none" />
-                <path
-                  d="M 50,-10 C 70,-50 130,-40 150,-10 C 160,20 105,40 65,20 C 52,12 50,-10 50,-10 Z"
-                  fill="#5C7A52"
-                  stroke="#8ECA7E"
-                  strokeWidth="2.5"
-                />
-                <path d="M 50,-10 Q 95,-10 140,-10" stroke="#8ECA7E" strokeWidth="2" strokeLinecap="round" fill="none" />
-              </>
-            )}
+          <g id={drawingId}>
+            <path
+              className="vine-stem"
+              d="M86 0 C86 28 56 48 56 80 S111 118 111 152 S77 192 77 218 S86 258 86 286 S99 334 86 360"
+            />
+            {shoots.map(({ x, y, facing, at }) => (
+              <g key={y} transform={`translate(${x} ${y}) scale(${facing} 1)`} className="vine-shoot" style={{ '--sprout-at': at } as CSSProperties}>
+                <path className="vine-stem vine-twig" d="M0 0 Q14 -17 37 -21 M13 -12 Q17 -22 19 -37" />
+                <path className="vine-leaf" d="M27 -19 C34 -37 53 -39 64 -35 C57 -20 42 -13 27 -19 Z M17 -29 C11 -42 17 -54 26 -60 C31 -45 26 -35 17 -29 Z" />
+                <path className="vine-vein" d="M31 -20 Q45 -25 56 -31 M18 -34 Q21 -42 24 -52" />
+              </g>
+            ))}
           </g>
-        ))}
+        </defs>
       </svg>
+      {Array.from({ length: segmentCount }, (_, index) => (
+        <div key={index} className="vine-segment" style={{ height: segmentHeight }}>
+          {tracks.map((track) => (
+            <svg key={track} className={`vine-track vine-${track}`} viewBox="0 0 172 360" preserveAspectRatio="none" fill="none">
+              <use href={`#${drawingId}`} transform={(index % 2 === 1) !== (track === 'left') ? 'translate(172 0) scale(-1 1)' : undefined} />
+            </svg>
+          ))}
+        </div>
+      ))}
     </div>
   );
 }

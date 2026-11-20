@@ -1,230 +1,156 @@
 'use client';
 
-import React, { useEffect, useState, Fragment } from 'react';
-import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Leaf, Sun, Moon, Globe, ChevronDown } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { Menu, X, Leaf, Sun, Moon } from 'lucide-react';
 import type { Locale } from '@/lib/i18n';
 import type { Dict } from '@/lib/dictionary';
+import { sectionHref, sections, type SectionId } from '@/lib/site-navigation';
 
-type Props = {
-  locale: Locale;
-  dict: Dict;
-};
-
-export function Header({ locale, dict }: Props) {
+export function Header({ locale, dict }: { locale: Locale; dict: Dict }) {
+  const pathname = usePathname();
+  const home = pathname === `/${locale}` || pathname === `/${locale}/`;
+  const [active, setActive] = useState<SectionId>('home');
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
-  const pathname = usePathname();
+  const toggle = useRef<HTMLButtonElement>(null);
+  const header = useRef<HTMLElement>(null);
+  const { resolvedTheme, setTheme } = useTheme();
+  const english = locale === 'en';
+  const navigationLabel = english ? 'Main navigation' : 'Ana menü';
+  const alternate = english ? 'tr' : 'en';
+  const detail = sections.find((id) => pathname.startsWith(`/${locale}/${id}/`));
+  const current = home ? active : detail;
+  const otherPath = home ? sectionHref(alternate, active) : pathname.replace(`/${locale}`, `/${alternate}`);
 
   useEffect(() => {
-    setMounted(true);
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    onScroll();
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+    const targets = home ? sections.flatMap((id) => {
+      const node = document.getElementById(id);
+      return node ? [{ id, node }] : [];
+    }) : [];
+    let scheduled = 0;
+    let currentSection: SectionId | undefined;
+    let pastHeader: boolean | undefined;
 
-  const navItems = [
-    { key: 'home', href: `/${locale}` },
-    { key: 'about', href: `/${locale}/about` },
-    { key: 'services', href: `/${locale}/services` },
-    { key: 'products', href: `/${locale}/products` },
-    { key: 'portfolio', href: `/${locale}/portfolio` },
-    { key: 'testimonials', href: `/${locale}/testimonials` },
-    { key: 'contact', href: `/${locale}/contact` },
-  ] as const;
+    const measure = () => {
+      scheduled = 0;
+      const compact = window.scrollY > 30;
+      if (compact !== pastHeader) {
+        pastHeader = compact;
+        setScrolled(compact);
+      }
+      if (!targets.length) return;
 
-  const isActive = (href: string) => {
-    if (href === `/${locale}`) return pathname === href;
-    return pathname.startsWith(href);
-  };
+      const line = (header.current?.getBoundingClientRect().bottom ?? 80) + 48;
+      let visible = targets[0].id;
+      for (const { id, node } of targets) {
+        if (node.getBoundingClientRect().top > line) break;
+        visible = id;
+      }
+      if (window.scrollY > 0 && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 3) {
+        visible = targets[targets.length - 1].id;
+      }
+      if (visible !== currentSection) {
+        currentSection = visible;
+        setActive(visible);
+      }
+    };
 
-  const switchLang = (newLocale: Locale) => {
-    const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
-    window.location.href = newPath;
-  };
+    const schedule = () => {
+      if (!scheduled) scheduled = window.requestAnimationFrame(measure);
+    };
+    measure();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    window.addEventListener('hashchange', schedule);
+    window.addEventListener('load', schedule);
+    const content = document.querySelector('main');
+    const observer = content ? new ResizeObserver(schedule) : undefined;
+    if (content) observer?.observe(content);
+
+    return () => {
+      window.cancelAnimationFrame(scheduled);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      window.removeEventListener('hashchange', schedule);
+      window.removeEventListener('load', schedule);
+      observer?.disconnect();
+    };
+  }, [home]);
+
+  const href = (id: SectionId) => home ? `#${id}` : sectionHref(locale, id);
+  const localLinks = (mobile: boolean) => sections.map((id) => (
+    <a
+      key={id}
+      href={href(id)}
+      aria-current={current === id ? (home ? 'location' : 'page') : undefined}
+      className={`section-nav-link ${mobile ? 'block rounded-lg px-4 py-3' : 'px-2.5 py-2 xl:px-3'}`}
+      onClick={() => {
+        if (!mobile) return;
+        setMobileOpen(false);
+        if (home) document.getElementById(id)?.focus({ preventScroll: true });
+      }}
+    >
+      {dict.nav[id]}
+    </a>
+  ));
 
   return (
-    <>
-      <motion.header
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled 
-            ? 'bg-background/95 backdrop-blur-md shadow-md border-b border-border/40' 
-            : 'bg-background/80 backdrop-blur-md border-b border-border/30 shadow-xs'
-        }`}
-      >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className={`flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-14' : 'h-20'}`}>
-            {/* Logo */}
-            <Link
-              href={`/${locale}`}
-              className="flex items-center gap-2 group"
-            >
-              <div className={`flex items-center justify-center rounded-lg bg-primary text-white transition-all duration-300 ${scrolled ? 'w-8 h-8' : 'w-10 h-10'}`}>
-                <Leaf className={scrolled ? 'w-4 h-4' : 'w-5 h-5'} />
-              </div>
-              <span className={`font-serif font-semibold text-foreground transition-all duration-300 truncate ${scrolled ? 'text-sm sm:text-base' : 'text-sm sm:text-lg'}`}>
-                Yeşil Toprak Peyzaj
-              </span>
-            </Link>
-
-            {/* Desktop nav */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {navItems.map((item) => {
-                const isItemActive = isActive(item.href);
-                return (
-                  <React.Fragment key={item.key}>
-                    <Link
-                      href={item.href}
-                      className={`relative px-3 py-2 text-sm font-medium transition-all duration-200 ${
-                        isItemActive
-                          ? 'text-accent-cta font-semibold'
-                          : 'text-foreground/80'
-                      }`}
-                    >
-                      <span className="inline-block transition-transform duration-200 hover:scale-115">
-                        {dict.nav[item.key]}
-                      </span>
-                      {isItemActive && (
-                        <motion.div
-                          layoutId="nav-underline"
-                          className="absolute bottom-0 left-3 right-3 h-0.5 bg-accent-cta rounded-full"
-                        />
-                      )}
-                    </Link>
-                  </React.Fragment>
-                );
-              })}
-            </nav>
-
-            {/* Right controls */}
-            <div className="flex items-center gap-2">
-              {/* Language toggle */}
-              <div className="relative">
-                <button
-                  onClick={() => setLangOpen(!langOpen)}
-                  className="flex items-center gap-1.5 px-2.5 py-2 rounded-md text-sm font-medium text-foreground hover:text-accent-cta hover:bg-accent-cta/10 transition-colors"
-                  aria-label={dict.language}
-                >
-                  <Globe className="w-4 h-4" />
-                  <span className="uppercase">{locale}</span>
-                </button>
-                <AnimatePresence>
-                  {langOpen && (
-                    <>
-                      <div className="fixed inset-0 z-40" onClick={() => setLangOpen(false)} />
-                      <motion.div
-                        initial={{ opacity: 0, y: -8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -8 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute right-0 mt-1 z-50 w-28 rounded-lg border border-border bg-card shadow-lg overflow-hidden"
-                      >
-                        <button
-                          onClick={() => switchLang('tr')}
-                          className={`flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors hover:bg-accent-cta/10 hover:text-accent-cta ${locale === 'tr' ? 'text-accent-cta font-medium' : 'text-foreground'}`}
-                        >
-                          <span className="text-base">🇹🇷</span> TR
-                        </button>
-                        <button
-                          onClick={() => switchLang('en')}
-                          className={`flex w-full items-center gap-2 px-3 py-2 text-sm transition-colors hover:bg-accent-cta/10 hover:text-accent-cta ${locale === 'en' ? 'text-accent-cta font-medium' : 'text-foreground'}`}
-                        >
-                          <span className="text-base">🇬🇧</span> EN
-                        </button>
-                      </motion.div>
-                    </>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Theme toggle */}
-              <button
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="p-2 rounded-md text-foreground hover:text-accent-cta hover:bg-accent-cta/10 transition-colors"
-                aria-label={theme === 'dark' ? dict.theme.light : dict.theme.dark}
-              >
-                {mounted && theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </button>
-
-              {/* CTA button */}
-              <Link
-                href={`/${locale}/contact`}
-                className="hidden sm:inline-flex items-center px-4 py-2 rounded-lg bg-accent-cta text-white text-sm font-medium hover:opacity-90 transition-opacity shadow-sm"
-              >
-                {dict.nav.cta}
-              </Link>
-
-              {/* Mobile menu button */}
-              <button
-                onClick={() => setMobileOpen(!mobileOpen)}
-                className="lg:hidden p-2 rounded-md text-foreground hover:text-accent-cta hover:bg-accent-cta/10 transition-colors"
-                aria-label="Menu"
-              >
-                {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
-            </div>
-          </div>
-        </div>
-      </motion.header>
-
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 lg:hidden"
+    <header
+      ref={header}
+      data-site-header
+      className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background text-foreground shadow-sm"
+      onBlur={(event) => {
+        if (mobileOpen && !event.currentTarget.contains(event.relatedTarget)) setMobileOpen(false);
+      }}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && mobileOpen) {
+          setMobileOpen(false);
+          toggle.current?.focus();
+        }
+      }}
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 sm:px-6 lg:px-8" style={{ minHeight: scrolled ? 56 : 76 }}>
+        <a href={sectionHref(locale, 'home')} className="flex min-w-0 items-center gap-2">
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary text-white"><Leaf size={20} aria-hidden="true" /></span>
+          <span className="font-serif text-base font-semibold leading-tight lg:text-lg">Yeşil Toprak Peyzaj</span>
+        </a>
+        <nav className="hidden items-center lg:flex" aria-label={navigationLabel}>{localLinks(false)}</nav>
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+          <a className="header-action" href={otherPath} lang={alternate} hrefLang={alternate} aria-label={english ? 'Türkçe' : 'English'}>{alternate.toUpperCase()}</a>
+          <button
+            className="header-action"
+            type="button"
+            onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+            aria-label={english ? 'Change colour theme' : 'Renk temasını değiştir'}
           >
-            <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 bottom-0 w-72 bg-card shadow-xl overflow-y-auto"
-            >
-              <div className="p-6 pt-20">
-                <nav className="flex flex-col gap-1">
-                  {navItems.map((item) => (
-                    <React.Fragment key={item.key}>
-                      <Link
-                        href={item.href}
-                        onClick={() => setMobileOpen(false)}
-                        className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                          isActive(item.href)
-                            ? 'text-accent-cta bg-muted font-bold'
-                            : 'text-foreground hover:scale-105 inline-block origin-left'
-                        }`}
-                      >
-                        {dict.nav[item.key]}
-                      </Link>
-                    </React.Fragment>
-                  ))}
-                </nav>
-                <Link
-                  href={`/${locale}/contact`}
-                  onClick={() => setMobileOpen(false)}
-                  className="mt-4 flex items-center justify-center px-4 py-2.5 rounded-lg bg-accent-cta text-white text-sm font-medium"
-                >
-                  {dict.nav.cta}
-                </Link>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+            <Moon className="h-4 w-4 dark:hidden" aria-hidden="true" />
+            <Sun className="hidden h-4 w-4 dark:block" aria-hidden="true" />
+          </button>
+          <a className="hidden rounded-lg bg-[#944c22] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#753918] xl:inline-block" href={href('contact')}>{dict.nav.cta}</a>
+          <button
+            ref={toggle}
+            className="header-action lg:hidden"
+            type="button"
+            aria-label={mobileOpen ? (english ? 'Close menu' : 'Menüyü kapat') : navigationLabel}
+            aria-expanded={mobileOpen}
+            aria-controls={mobileOpen ? 'mobile-navigation' : undefined}
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
+      </div>
+      {mobileOpen && (
+        <>
+          <div className="fixed inset-x-0 bottom-0 z-40 bg-black/45 lg:hidden" style={{ top: scrolled ? 56 : 76 }} aria-hidden="true" onClick={() => { setMobileOpen(false); toggle.current?.focus(); }} />
+          <nav id="mobile-navigation" className="absolute right-0 top-full z-50 max-h-[calc(100dvh-5rem)] w-[min(20rem,100vw)] overflow-auto border-l border-border bg-background p-3 shadow-lg lg:hidden" aria-label={navigationLabel}>
+            {localLinks(true)}
+          </nav>
+        </>
+      )}
+      <noscript><nav className="flex flex-wrap border-t border-border px-4 lg:hidden" aria-label={navigationLabel}>{localLinks(false)}</nav></noscript>
+    </header>
   );
 }
