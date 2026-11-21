@@ -447,7 +447,8 @@ html { scroll-padding-top: 5.25rem; }
   contain: paint;
   pointer-events: none;
   --vine-inset: clamp(0rem, calc((100% - 81rem) / 2), 4rem);
-  --vine-width: clamp(5rem, 12vw, 10rem);
+  --vine-max-width: 10rem;
+  --vine-width: clamp(5rem, 12vw, var(--vine-max-width));
 }
 
 .vine-segment {
@@ -466,13 +467,6 @@ html { scroll-padding-top: 5.25rem; }
 .vine-left {
   left: var(--vine-inset);
   opacity: calc(var(--vine-opacity) * 0.68);
-}
-
-.vine-center {
-  left: 50%;
-  width: calc(var(--vine-width) * 0.72);
-  transform: translateX(-50%);
-  opacity: calc(var(--vine-opacity) * 0.4);
 }
 
 .vine-right { right: var(--vine-inset); }
@@ -518,16 +512,17 @@ html { scroll-padding-top: 5.25rem; }
   .contact-photo { aspect-ratio: auto; min-height: clamp(24rem, 34vw, 31rem); }
 }
 
+@media (max-width: 767px) {
+  .vine-layer { --vine-width: var(--vine-max-width); }
+  .vine-left { display: none; }
+}
+
 @media (max-width: 639px) {
   .hero-landscape { min-height: clamp(29rem, 69svh, 41rem); }
   .hero-landscape img { object-position: 62% center; }
   .season-controls { grid-auto-flow: column; gap: 0.05rem; }
   .season-controls::before { inset: 50% 1.35rem auto; width: auto; height: 1px; }
   .season-button:hover .season-glyph { transform: translateY(-0.12rem); }
-  .vine-layer { --vine-inset: -0.4rem; --vine-width: 4rem; }
-  .vine-left { opacity: calc(var(--vine-opacity) * 0.6); }
-  .vine-center { opacity: calc(var(--vine-opacity) * 0.32); }
-  .vine-stem { stroke-width: 1.8; }
 }
 
 @media (scripting: none) {

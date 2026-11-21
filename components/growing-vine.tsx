@@ -10,7 +10,7 @@ const shoots = [
   { x: 77, y: 218, facing: -1, at: 61 },
   { x: 86, y: 286, facing: 1, at: 80 },
 ];
-const homeTracks = ['left', 'center', 'right'] as const;
+const homeTracks = ['left', 'right'] as const;
 const detailTracks = ['right'] as const;
 
 export function HomeVines() {
