@@ -506,7 +506,7 @@ html { scroll-padding-top: 5.25rem; }
     align-items: start;
     grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
   }
-  .home-hero-copy { order: -1; justify-content: flex-start; padding-block-start: 0; }
+  .home-hero-copy { justify-content: flex-start; padding-block-start: 0; }
   .home-hero-sprig { position: static; margin-bottom: clamp(1rem, 1.8vw, 1.6rem); }
   .contact-layout { width: min(100% - 5rem, 81rem); grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
   .contact-photo { aspect-ratio: auto; min-height: clamp(24rem, 34vw, 31rem); }

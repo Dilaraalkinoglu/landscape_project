@@ -53,6 +53,17 @@ export function HeroSeasonalView({ locale, seasonalImages, children }: {
 
   return (
     <div className="home-hero-layout">
+      <div className="home-hero-copy">
+        <Image
+          src="/images/mediterranean/hero-sprig.png"
+          alt=""
+          aria-hidden="true"
+          width={320}
+          height={200}
+          className="home-hero-sprig"
+        />
+        {children}
+      </div>
       <figure className="hero-season-photo">
         {previous && <Image src={seasonalImages[previous]} alt="" className="season-landscape" fill sizes={photoSizes} />}
         <Image
@@ -90,17 +101,6 @@ export function HeroSeasonalView({ locale, seasonalImages, children }: {
               : activeLabel}
         </p>
       </figure>
-      <div className="home-hero-copy">
-        <Image
-          src="/images/mediterranean/hero-sprig.png"
-          alt=""
-          aria-hidden="true"
-          width={320}
-          height={200}
-          className="home-hero-sprig"
-        />
-        {children}
-      </div>
     </div>
   );
 }
