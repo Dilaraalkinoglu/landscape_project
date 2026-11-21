@@ -1,8 +1,13 @@
-type ContactDetails = { phone?: { number: string; label: string }; email?: string };
+export const contactDetails = {
+  phone: '+90 (312) 000 00 00',
+  email: 'iletisim@yesiltoprak.example',
+  address: {
+    tr: 'Filiz Bahçesi Sokak No. 12, Çankaya / Ankara',
+    en: '12 Filiz Bahçesi Street, Çankaya, Ankara',
+  },
+};
 
-export const contactDetails: ContactDetails = {};
-
-export const contactDraft = {
-  tr: 'İletişim bilgileri güncelleniyor.',
-  en: 'Contact details are being updated.',
+export const contactExampleLabel = {
+  tr: 'Temsili iletişim bilgileri',
+  en: 'Sample contact details',
 };

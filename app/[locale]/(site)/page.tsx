@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { ArrowRight, ArrowUpRight, Quote } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { getDict, heroSeasonalImages, aboutHeroImage, contactGardenImage, projects, services, team, testimonials } from '@/lib/dictionary';
-import { contactDetails, contactDraft } from '@/lib/contact-details';
+import { contactDetails, contactExampleLabel } from '@/lib/contact-details';
 import { isLocale, type Locale } from '@/lib/i18n';
 import { SectionReveal } from '@/components/section-reveal';
 import { HeroSeasonalView } from '@/components/hero-seasonal-view';
@@ -34,7 +34,6 @@ export default function HomePage({ params }: { params: { locale: string } }) {
   const locale = params.locale;
   const dict = getDict(locale);
   const english = locale === 'en';
-  const contact = contactDetails;
 
   return (
     <>
@@ -180,10 +179,13 @@ export default function HomePage({ params }: { params: { locale: string } }) {
             <p className="contact-label">{dict.nav.contact}</p>
             <h2 id="contact-title" className="contact-title font-semibold">{dict.ctaSection.title}</h2>
             <p className="contact-description">{dict.ctaSection.subtitle}</p>
-            <div className="contact-details">
-              {contact.phone && <a href={`tel:${contact.phone.number}`} className="mr-5 inline-block underline">{contact.phone.label}</a>}
-              {contact.email && <a href={`mailto:${contact.email}`} className="inline-block underline">{contact.email}</a>}
-              {!contact.phone && !contact.email && <p className="font-medium">{contactDraft[locale]}</p>}
+            <div className="contact-details [overflow-wrap:anywhere]">
+              <p className="font-medium">{contactExampleLabel[locale]}</p>
+              <address className="mt-2 space-y-1 not-italic text-muted-foreground">
+                <p>{contactDetails.phone}</p>
+                <p>{contactDetails.email}</p>
+                <p>{contactDetails.address[locale]}</p>
+              </address>
             </div>
           </div>
         </div>
