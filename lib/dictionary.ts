@@ -16,7 +16,7 @@ export type Project = {
   location: { tr: string; en: string };
   year: string;
   cover: string;
-  gallery: string[];
+  gallery: (keyof typeof projectPhotoCaptions)[];
   description: { tr: string; en: string };
   scope: { tr: string[]; en: string[] };
 };
@@ -134,7 +134,6 @@ export type Dict = {
   portfolioPage: {
     hero: { badge: string; title: string; subtitle: string };
     filters: { all: string; residential: string; commercial: string; hardscape: string; irrigation: string; lighting: string; maintenance: string };
-    inspect: string;
     close: string;
     location: string;
     year: string;
@@ -158,6 +157,33 @@ export type Dict = {
   theme: { light: string; dark: string };
   language: string;
 };
+
+export const projectPhotoCaptions = {
+  '/images/mediterranean/modern-villa.webp': {
+    tr: 'Modern bir konutun girişini çevreleyen katmanlı bitkiler.',
+    en: 'Layered planting frames the entrance to a modern home.',
+  },
+  '/images/mediterranean/garden-pool.webp': {
+    tr: 'Taş yürüyüş yolu, havuz ve bahçe aydınlatması.',
+    en: 'A stone path, a pool and garden lighting.',
+  },
+  '/images/mediterranean/terrace-garden.webp': {
+    tr: 'Bahçeye açılan gölgeli teras ve geniş yapraklı bitkiler.',
+    en: 'A shaded terrace opens onto a garden with broad-leaved plants.',
+  },
+  '/images/mediterranean/stone-villa.webp': {
+    tr: 'Taş cephenin önünde kayalar ve katmanlı bitkiler.',
+    en: 'Rocks and layered planting in front of a stone façade.',
+  },
+  '/images/mediterranean/garden-path.webp': {
+    tr: 'Çimlerin arasından geçen taş yolu küçük bahçe fenerleri çevreliyor.',
+    en: 'Low garden lanterns flank a stone path across the lawn.',
+  },
+  '/images/mediterranean/stone-garden.webp': {
+    tr: 'Zeytin ağacı, beyaz çakıl taşları ve çim alan.',
+    en: 'An olive tree, white pebbles and a lawn.',
+  },
+} satisfies Record<string, Record<Locale, string>>;
 
 export const projects: Project[] = [
   {
@@ -742,7 +768,6 @@ const dictionaries: Record<Locale, Dict> = {
         lighting: 'Aydınlatma',
         maintenance: 'Bakım',
       },
-      inspect: '3D İncele',
       close: 'Kapat',
       location: 'Konum',
       year: 'Yıl',
@@ -925,7 +950,6 @@ const dictionaries: Record<Locale, Dict> = {
         lighting: 'Lighting',
         maintenance: 'Maintenance',
       },
-      inspect: '3D Inspect',
       close: 'Close',
       location: 'Location',
       year: 'Year',

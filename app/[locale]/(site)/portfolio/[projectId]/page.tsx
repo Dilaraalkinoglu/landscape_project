@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { ArrowLeft, Calendar, Check, MapPin } from 'lucide-react';
 import { notFound } from 'next/navigation';
-import { getDict, projects } from '@/lib/dictionary';
+import { getDict, projectPhotoCaptions, projects } from '@/lib/dictionary';
 import { isLocale } from '@/lib/i18n';
 import { sectionHref } from '@/lib/site-navigation';
 import { GardenFlow, GardenSection } from '@/components/garden-section';
@@ -21,6 +21,7 @@ export default function ProjectDetailPage({ params }: { params: { locale: string
   const matching = projects.filter((item) => item.id !== project.id && item.category === project.category);
   const related = [...matching, ...projects.filter((item) => item.id !== project.id && item.category !== project.category)].slice(0, 3);
   const photoLabel = locale === 'tr' ? 'Temsili peyzaj fotoğrafı' : 'Illustrative landscape photo';
+  const photos = project.gallery.map((src) => ({ src, caption: projectPhotoCaptions[src][locale] }));
 
   return (
     <div>
@@ -45,7 +46,7 @@ export default function ProjectDetailPage({ params }: { params: { locale: string
               <h2 className="text-3xl font-semibold">{project.title[locale]}</h2>
               <p className="mt-4 leading-8 text-muted-foreground">{project.description[locale]}</p>
               <h3 className="mb-4 mt-8 text-sm font-semibold uppercase tracking-wider text-primary-accent">{dict.portfolioPage.gallery}</h3>
-              <InteractiveGalleryViewer images={project.gallery} locale={locale} />
+              <InteractiveGalleryViewer photos={photos} locale={locale} />
             </div>
             <div className="h-fit rounded-2xl border border-border bg-card p-6">
               <h2 className="text-xl font-semibold">{dict.portfolioPage.scope}</h2>
@@ -64,7 +65,7 @@ export default function ProjectDetailPage({ params }: { params: { locale: string
           <h2 className="text-3xl font-semibold">{dict.featuredProjects.title}</h2>
           <p className="mt-2 text-sm text-muted-foreground">{photoLabel}</p>
           <div className="mt-6 grid gap-5 md:grid-cols-3">
-            {related.map((item) => <FeaturedProjectCard key={item.id} project={item} locale={locale} index={1} inspectLabel={dict.portfolioPage.inspect} />)}
+            {related.map((item) => <FeaturedProjectCard key={item.id} project={item} locale={locale} index={1} />)}
           </div>
         </GardenSection>
       </GardenFlow>

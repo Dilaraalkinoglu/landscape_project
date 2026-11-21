@@ -118,12 +118,12 @@ export default function HomePage({ params }: { params: { locale: string } }) {
           <p className="mt-2 text-sm text-muted-foreground">{english ? 'Illustrative landscape photos' : 'Temsili peyzaj fotoğrafları'}</p>
         </SectionReveal>
         <div className="mt-10 grid gap-5 md:grid-cols-2">
-          {projects.slice(0, 4).map((project, index) => <FeaturedProjectCard key={project.id} project={project} locale={locale} index={index} inspectLabel={dict.portfolioPage.inspect} />)}
+          {projects.slice(0, 4).map((project, index) => <FeaturedProjectCard key={project.id} project={project} locale={locale} index={index} />)}
         </div>
         <details className="more-panel mt-6">
           <summary>{dict.featuredProjects.viewAll}</summary>
           <div className="mt-5 grid gap-5 md:grid-cols-2">
-            {projects.slice(4).map((project) => <FeaturedProjectCard key={project.id} project={project} locale={locale} index={1} inspectLabel={dict.portfolioPage.inspect} />)}
+            {projects.slice(4).map((project) => <FeaturedProjectCard key={project.id} project={project} locale={locale} index={1} />)}
           </div>
         </details>
       </GardenSection>

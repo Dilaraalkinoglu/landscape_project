@@ -542,9 +542,9 @@ html { scroll-padding-top: 5.25rem; }
   .section-nav-link, .header-action, .season-glyph, .product-filter, .surface-card { transition-duration: 0s; }
 }
 .gallery-control { display: inline-grid; min-width: 2.75rem; min-height: 2.75rem; place-items: center; border-radius: 0.45rem; background: #fff2; }
-.gallery-control:hover:not(:disabled) { background: #fff4; }
-.gallery-control:disabled { opacity: 0.45; }
+.gallery-control:hover { background: #fff4; }
 .gallery-control:focus-visible { outline-color: #f1c29b; }
+.gallery-swipe { touch-action: pan-y pinch-zoom; }
 .gallery-thumbnail { border-color: transparent; }
 .gallery-thumbnail[aria-pressed='true'] { border-color: var(--primary-accent); }
 .gallery-dialog { width: min(92vw, 70rem); max-height: 92svh; margin: auto; background: #1b2419; color: white; }

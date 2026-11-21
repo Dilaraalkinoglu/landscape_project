@@ -64,7 +64,7 @@ export default function ServiceDetailPage({ params }: { params: { locale: string
           <h2 className="text-3xl font-semibold">{dict.servicesPage.relatedProjects}</h2>
           <p className="mt-2 text-sm text-muted-foreground">{locale === 'tr' ? 'Temsili peyzaj fotoğrafları' : 'Illustrative landscape photos'}</p>
           <div className="mt-6 grid gap-5 md:grid-cols-3">
-            {related.map((project) => <FeaturedProjectCard key={project.id} project={project} locale={locale} index={1} inspectLabel={dict.portfolioPage.inspect} />)}
+            {related.map((project) => <FeaturedProjectCard key={project.id} project={project} locale={locale} index={1} />)}
           </div>
         </GardenSection>
       </GardenFlow>
